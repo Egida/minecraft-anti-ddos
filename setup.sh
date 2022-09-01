@@ -9,6 +9,11 @@ iptables -t mangle -A PREROUTING -p tcp -m conntrack --ctstate NEW -m tcpmss ! -
 # block all icmp packets
 iptables -t mangle -A PREROUTING -p icmp -j DROP
 
+# block port scan
+sudo iptables -N anti-port-scan
+sudo iptables -A anti-port-scan -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j RETURN
+sudo iptables -A anti-port-scan -j DROP
+
 # block hosts that have more than 5 established connections
 iptables -A INPUT -p tcp -m connlimit --connlimit-above 5 -j REJECT --reject-with tcp-reset
 # limits the new tcp connections that a client can establish per second
