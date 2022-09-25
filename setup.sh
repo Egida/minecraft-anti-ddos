@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# port you are running your minecraft server on
+minecraft_port=25565
+
 # block invalid packets
 iptables -t mangle -A PREROUTING -m conntrack --ctstate INVALID -j DROP
 # block not syn packets
@@ -19,6 +22,3 @@ iptables -A INPUT -p tcp -m connlimit --connlimit-above 5 -j REJECT --reject-wit
 # limits the new tcp connections that a client can establish per second
 iptables -A INPUT -p tcp -m conntrack --ctstate NEW -m limit --limit 8/s --limit-burst 4 -j ACCEPT 
 iptables -A INPUT -p tcp -m conntrack --ctstate NEW -j DROP
-
-# port you are running your minecraft server on
-minecraft_port=25565
