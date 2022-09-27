@@ -1,11 +1,15 @@
 #!/bin/bash
 
+# ---------------------------------------------------------
+# block or limit ununused \ invalid packets 
+# ---------------------------------------------------------
 
-# ---------------------------------------------------------
-# bloack or limit ununused \ invalid packets 
-# ---------------------------------------------------------
 # block invalid packets
 iptables -t mangle -A PREROUTING -m conntrack --ctstate INVALID -j DROP
+# block xmas packets (kamikaze packets)
+iptables -t mangle -A PREROUTING -p tcp -m tcp --tcp-flags ALL ALL -j DROP
+# Block null packet
+iptables -t mangle -A PREROUTING -p tcp -m tcp --tcp-flags ALL NONE -j DROP 
 # block not syn packets
 iptables -t mangle -A PREROUTING -p tcp ! --syn -m conntrack --ctstate NEW -j DROP
 # block uncommon MMS values
@@ -17,6 +21,10 @@ iptables -t mangle -A PREROUTING -f -j DROP
 # limit rst packets
 iptables -A INPUT -p tcp --tcp-flags RST RST -m limit --limit 2/s --limit-burst 2 -j ACCEPT
 iptables -A INPUT -p tcp --tcp-flags RST RST -j DROP
+
+# ---------------------------------------------------------
+# active protection
+# ---------------------------------------------------------
 
 # block port scan
 sudo iptables -N anti-port-scan
@@ -37,3 +45,9 @@ iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 # protect ssh from brute-force
 iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -m recent --set
 iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -m recent --update --seconds 120 --hitcount 30 -j DROP
+
+# protect rcon from brute-force
+# enter your rcon port or remove this if you don't use rcon
+rcon_port="21000"
+iptables -A INPUT -p tcp --dport $rcon_port -m conntrack --ctstate NEW -m recent --set
+iptables -A INPUT -p tcp --dport $rcon_port -m conntrack --ctstate NEW -m recent --update --seconds 60 --hitcount 20 -j DROP
