@@ -1,5 +1,19 @@
 #!/bin/bash
 
+#      __   __               _                  
+#  ___/ /__/ /__  ___   ____(_)__  ___  ___ ____
+# / _  / _  / _ \(_-<  / __/ / _ \/ _ \/ -_) __/
+# \_,_/\_,_/\___/___/ /_/ /_/ .__/ .__/\__/_/   
+#                          /_/  /_/             
+#
+# created by oqo0 | 2022 
+# 
+# This script is free and open for any use and distribution. It is recommended to adjust the following
+# parameters for yourself in order to achieve the best protection quality. This script has been tested
+# on servers with hundreds of regular players. If you encounter any problems please create an issue on
+# project's Github: https://github.com/oqo0/minecraft-anti-ddos
+# 
+
 #
 # block dangerous activity
 #
