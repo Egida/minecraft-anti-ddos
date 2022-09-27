@@ -13,6 +13,8 @@
 # on servers with hundreds of regular players. If you encounter any problems please create an issue on
 # project's Github: https://github.com/oqo0/minecraft-anti-ddos
 # 
+# It is also quite important to note that if your hosting provider does not have DDOS protection, then
+# this script will be practically useless.
 
 #
 # block dangerous activity
