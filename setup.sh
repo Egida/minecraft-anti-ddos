@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# dangerous aactivity
+# dangerous activity
 #
 # these rules supposed to block invalid \ dangerous traffic
 # it is not recommended to remove any rules from here
