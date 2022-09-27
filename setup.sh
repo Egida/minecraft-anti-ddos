@@ -1,8 +1,11 @@
 #!/bin/bash
 
-# ---------------------------------------------------------
-# block or limit ununused \ invalid packets 
-# ---------------------------------------------------------
+#
+# dangerous aactivity
+#
+# these rules supposed to block invalid \ dangerous traffic
+# it is not recommended to remove any rules from here
+#
 
 # block invalid packets
 iptables -t mangle -A PREROUTING -m conntrack --ctstate INVALID -j DROP
@@ -22,9 +25,12 @@ iptables -t mangle -A PREROUTING -f -j DROP
 iptables -A INPUT -p tcp --tcp-flags RST RST -m limit --limit 2/s --limit-burst 2 -j ACCEPT
 iptables -A INPUT -p tcp --tcp-flags RST RST -j DROP
 
-# ---------------------------------------------------------
+# 
 # active protection
-# ---------------------------------------------------------
+# 
+# the main task of this section is to reduce the load on the server during peak loads
+# you can adjust some values
+#
 
 # block port scan
 sudo iptables -N anti-port-scan
@@ -47,7 +53,15 @@ iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -m recent --set
 iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -m recent --update --seconds 120 --hitcount 30 -j DROP
 
 # protect rcon from brute-force
-# enter your rcon port or remove this if you don't use rcon
+# enter your rcon port or remove this if you don't use it
 rcon_port="21000"
 iptables -A INPUT -p tcp --dport $rcon_port -m conntrack --ctstate NEW -m recent --set
 iptables -A INPUT -p tcp --dport $rcon_port -m conntrack --ctstate NEW -m recent --update --seconds 60 --hitcount 20 -j DROP
+
+# 
+# geo protection
+# 
+# you can use this section to whitelist traffic from specific countries \ regions
+# this option is disabled by default
+# it is recommended to enable after you change the list of countries to the desired one
+#
