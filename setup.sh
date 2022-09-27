@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# dangerous activity
+# block dangerous activity
 #
 # these rules supposed to block invalid \ dangerous traffic
 # it is not recommended to remove any rules from here
@@ -78,7 +78,7 @@ iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -m recent --upda
 
 # protect rcon from brute-force
 # enter your rcon port or remove this if you don't use it
-rcon_port="21000"
+rcon_port=21000
 iptables -A INPUT -p tcp --dport $rcon_port -m conntrack --ctstate NEW -m recent --set
 iptables -A INPUT -p tcp --dport $rcon_port -m conntrack --ctstate NEW -m recent --update --seconds 60 --hitcount 20 -j DROP
 
@@ -89,3 +89,18 @@ iptables -A INPUT -p tcp --dport $rcon_port -m conntrack --ctstate NEW -m recent
 # this option is disabled by default
 # it is recommended to enable after you change the list of countries to the desired one
 #
+
+# set your minecraft port
+minecraft_port=25565
+
+# get country ip blocks
+country_list="https://raw.githubusercontent.com/herrbischoff/country-ip-blocks/master/ipv4/"
+
+# add whitelisted countries to an ipset
+for ip in $(curl -L $country_list/{gb,de,fr,ro}.cidr);
+    do ipset -A county_whitelist $ip
+done
+
+# allow connections only from whitelisted countries
+iptables -A INPUT -m set --match-set county_whitelist src -p tcp --dport $minecraft_port -j ACCEPT
+iptables -A INPUT -p tcp --dport $minecraft_port -j DROP
