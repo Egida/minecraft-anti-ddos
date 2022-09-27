@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 #      __   __               _                  
 #  ___/ /__/ /__  ___   ____(_)__  ___  ___ ____
 # / _  / _  / _ \(_-<  / __/ / _ \/ _ \/ -_) __/
@@ -16,30 +17,37 @@
 # It is also quite important to note that if your hosting provider does not have DDOS protection, then
 # this script will be practically useless.
 
+
+# Block dangerous activity
 #
-# block dangerous activity
-#
-# these rules supposed to block invalid \ dangerous traffic
-# it is not recommended to remove any rules from here
-#
+# These rules are supposed to block invalid \ dangerous traffic from users.
+# Not recommended to remove any rules from here.
 
 # block invalid packets
 iptables -t mangle -A PREROUTING -m conntrack --ctstate INVALID -j DROP
+
 # block xmas packets (kamikaze packets)
 iptables -t mangle -A PREROUTING -p tcp -m tcp --tcp-flags ALL ALL -j DROP
-# Block null packet
+
+# block null packets
 iptables -t mangle -A PREROUTING -p tcp -m tcp --tcp-flags ALL NONE -j DROP 
+
 # block not syn packets
 iptables -t mangle -A PREROUTING -p tcp ! --syn -m conntrack --ctstate NEW -j DROP
+
 # block uncommon MMS values
 iptables -t mangle -A PREROUTING -p tcp -m conntrack --ctstate NEW -m tcpmss ! --mss 536:65535 -j DROP
+
 # block all icmp packets
 iptables -t mangle -A PREROUTING -p icmp -j DROP
+
 # drop fragments in all chains
 iptables -t mangle -A PREROUTING -f -j DROP
+
 # limit rst packets
 iptables -A INPUT -p tcp --tcp-flags RST RST -m limit --limit 2/s --limit-burst 2 -j ACCEPT
 iptables -A INPUT -p tcp --tcp-flags RST RST -j DROP
+
 # block packets with bogus tcp flags
 iptables -A PREROUTING -p tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP
 iptables -A PREROUTING -p tcp --tcp-flags FIN,SYN FIN,SYN -j DROP
@@ -54,6 +62,7 @@ iptables -A PREROUTING -p tcp --tcp-flags ALL NONE -j DROP
 iptables -A PREROUTING -p tcp --tcp-flags ALL FIN,PSH,URG -j DROP
 iptables -A PREROUTING -p tcp --tcp-flags ALL SYN,FIN,PSH,URG -j DROP
 iptables -A PREROUTING -p tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG -j DROP
+
 # block spoofed packets
 iptables -A PREROUTING -s 224.0.0.0/3 -j DROP
 iptables -A PREROUTING -s 169.254.0.0/16 -j DROP
@@ -65,12 +74,11 @@ iptables -A PREROUTING -s 0.0.0.0/8 -j DROP
 iptables -A PREROUTING -s 240.0.0.0/5 -j DROP
 iptables -A PREROUTING -s 127.0.0.0/8 ! -i lo -j DROP
 
+
+# Traffic protection
 # 
-# active protection
-# 
-# the main task of this section is to reduce the load on the server during peak loads
-# you can adjust some values
-#
+# The main task of this section is to reduce the load on the server during peak loads.
+# You can adjust some values.
 
 # block port scan
 sudo iptables -N anti-port-scan
@@ -98,22 +106,27 @@ rcon_port=21000
 iptables -A INPUT -p tcp --dport $rcon_port -m conntrack --ctstate NEW -m recent --set
 iptables -A INPUT -p tcp --dport $rcon_port -m conntrack --ctstate NEW -m recent --update --seconds 60 --hitcount 20 -j DROP
 
+
+# Geo protection
 # 
-# geo protection
-# 
-# you can use this section to whitelist traffic from specific countries \ regions
-# this option is disabled by default
-# it is recommended to enable after you change the list of countries to the desired one
-#
+# You can use this section to whitelist traffic from specific countries \ regions.
+# This option is disabled by default.
+# It is recommended to enable after you change the list of countries to the desired one.
+
+# enable geo protection
+enable_geo_protection=false
 
 # set your minecraft port
 minecraft_port=25565
+
+# whitelisted countries
+whitelisted_countries="us,uk,fr"
 
 # get country ip blocks
 country_list="https://raw.githubusercontent.com/herrbischoff/country-ip-blocks/master/ipv4/"
 
 # add whitelisted countries to an ipset
-for ip in $(curl -L $country_list/{gb,de,fr,ro}.cidr);
+for ip in $(curl -L $country_list/{$whitelisted_countries}.cidr);
     do ipset -A county_whitelist $ip
 done
 
