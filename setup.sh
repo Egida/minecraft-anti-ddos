@@ -57,21 +57,25 @@ yum -y install curl iptables-service ipset-service conntrack > /dev/null
 
 
 # Block dangerous activity
+echo "Blocking dangerous \ invalid packets."
 ./scripts/activity_protection.sh
 
 # Traffic protection
+echo "Enabling traffic limitations \ protection."
 ./scripts/traffic_protection.sh $max_established_connections $max_connections_per_second $rcon_port
 
 # Geo protection
 if [ "$geo_whitelist_enabled" = true ] ; then
+    echo "Enabling geo filter."
     ./scripts/geo_protection.sh $geo_minecraft_port $geo_whitelist_countries 
 fi
 
 # Blocks somhow-invalid \ dangerous traffic.
 if [ "$enable_advanced_protection" = true ] ; then
+    echo "Enabling advanced protection."
     ./scripts/advanced_protection.sh
 fi
 
-
+echo "Saving rules."
 iptables-save > /etc/sysconfig/iptables
 iptables-save > /etc/iptables/rules.v4
