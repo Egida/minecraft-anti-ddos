@@ -23,28 +23,8 @@
 
 ######################################################################################################
 
-# Max amount of connections that can be established from and ip at the same time.
-# default: 12
-max_established_connections=12
-
-# Max amount of new connections allowed in 1 minute.
-# default: 60
-max_connections_per_minute=60
-
-# Rcon port you are using. Don't change this if you don't use rcon.
-rcon_port=999999
-
-
 # Allow traffic to your Minecraft port only from whitelisted countries.
 geo_whitelist_enabled=false
-
-# Your Minecraft port.
-geo_minecraft_port=25565
-
-# Whitelisted countries
-# Uses country TLD: https://gist.github.com/oqo0/47a185af30c966a362dbdfebf3771400
-geo_whitelist_countries="us,uk,fr,de"
-
 
 # Please check scripts/experimental_protection.sh before enabling
 # Disabled by default because it might cause some problems with incoming minecraft connections.
@@ -54,29 +34,26 @@ enable_experimental_protection=false
 
 
 echo "Installing dependencies."
-apt -y -qq install curl iptables-persistent ipset conntrack > /dev/null
-yum -y install curl iptables-service ipset-service conntrack > /dev/null
+apt -y -qq install curl iptables-persistent ipset conntrack
+yum -y install curl iptables-service ipset-service conntrack
 
 
-# Block dangerous activity
 echo "Blocking dangerous \ invalid packets."
 ./scripts/activity_protection.sh
 
-# Traffic protection
 echo "Enabling traffic limitations \ protection."
-./scripts/traffic_protection.sh $max_established_connections $max_connections_per_minute $rcon_port
+./scripts/traffic_protection.sh
 
-# Geo protection
 if [ "$geo_whitelist_enabled" = true ] ; then
     echo "Enabling geo filter."
-    ./scripts/geo_protection.sh $geo_minecraft_port $geo_whitelist_countries 
+    ./scripts/geo_protection.sh 
 fi
 
-# Blocks somhow-invalid \ dangerous traffic.
 if [ "$enable_experimental_protection" = true ] ; then
     echo "Enabling experimental protection."
     ./scripts/experimental_protection.sh
 fi
+
 
 echo "Saving rules."
 iptables-save > /etc/sysconfig/iptables

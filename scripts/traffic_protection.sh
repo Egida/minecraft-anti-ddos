@@ -1,14 +1,15 @@
 #!/bin/bash
 
 # block port scan
-sudo iptables -N anti-port-scan
-sudo iptables -A anti-port-scan -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j RETURN
-sudo iptables -A anti-port-scan -j DROP
+iptables -N anti-port-scan
+iptables -A anti-port-scan -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j RETURN
+iptables -A anti-port-scan -j DROP
 
-# block hosts that have more than $1 established connections
-iptables -A INPUT -p tcp -m connlimit --connlimit-above $1 -j REJECT --reject-with tcp-reset
-# limits the new tcp connections that a client can establish per second
-iptables -A INPUT -p tcp -m conntrack --ctstate NEW -m limit --limit 60/s --limit-burst $2 -j ACCEPT 
+# block hosts that have more than 6 established connections
+iptables -A INPUT -p tcp -m connlimit --connlimit-above 6 -j REJECT --reject-with tcp-reset
+# limits the new tcp connections that a client can establish
+iptables -A INPUT -p tcp -m conntrack --ctstate NEW -m limit --limit 10/s --limit-burst 8 -j ACCEPT
+iptables -A INPUT -p tcp -m conntrack --ctstate NEW -m limit --limit 300/s --limit-burst 30 -j ACCEPT 
 iptables -A INPUT -p tcp -m conntrack --ctstate NEW -j DROP
 
 # protect ssh from brute-force
