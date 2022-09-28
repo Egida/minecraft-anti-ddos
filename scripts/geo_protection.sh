@@ -7,7 +7,7 @@ ipset -N -! country_whitelist hash:net maxelem 100000
 country_list="https://raw.githubusercontent.com/herrbischoff/country-ip-blocks/master/ipv4/"
 
 # add whitelisted countries to an ipset
-for ip in $(curl -L $country_list/{$2}.cidr);
+for ip in $(curl -L $country_list/{de,us,uk,fr}.cidr);
     do ipset -A country_whitelist $ip
 done
 

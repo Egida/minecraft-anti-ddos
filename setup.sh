@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#      __   __               _                   
-#  ___/ /__/ /__  ___   ____(_)__  ___  ___ ____ 
-# / _  / _  / _ \(_-<  / __/ / _ \/ _ \/ -_) __/ 
-# \_,_/\_,_/\___/___/ /_/ /_/ .__/ .__/\__/_/    
-#                          /_/  /_/              
-#
 # created by oqo0 | 2022 
 # 
 # This script is free and open for any use and distribution. It is recommended to adjust the following
@@ -16,21 +10,15 @@
 # It is also quite important to note that if your hosting provider does not have any common anti-DDOS,
 # then this script will be practically useless.
 #
-# Important!
-# If you have already ran this script and you want to make some changes to protection, run ./tear-down
-# script first.
 
-
-######################################################################################################
 
 # Allow traffic to your Minecraft port only from whitelisted countries.
+# Check scripts/geo_protection.sh first.
 geo_whitelist_enabled=false
 
-# Please check scripts/experimental_protection.sh before enabling
+# Please check scripts/experimental_protection.sh before enabling.
 # Disabled by default because it might cause some problems with incoming minecraft connections.
 enable_experimental_protection=false
-
-######################################################################################################
 
 
 echo "Installing dependencies."
