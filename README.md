@@ -1,3 +1,4 @@
 # Minecraft DDOS ripper
 
-Iptables ddos protection
+Iptables ddos protection for Minecraft
+

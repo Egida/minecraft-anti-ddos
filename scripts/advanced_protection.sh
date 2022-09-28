@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# block giant packets
+iptables -I INPUT -p tcp -m length --length 10000:65535 -j DROP
+
 # block packets with bogus tcp flags
 iptables -A PREROUTING -p tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP
 iptables -A PREROUTING -p tcp --tcp-flags FIN,SYN FIN,SYN -j DROP
