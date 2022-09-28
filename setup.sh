@@ -51,6 +51,11 @@ enable_advanced_protection=false
 ######################################################################################################
 
 
+echo "Installing dependencies."
+apt -y -qq install curl iptables-persistent ipset conntrack > /dev/null
+yum -y install curl iptables-service ipset-service conntrack > /dev/null
+
+
 # Block dangerous activity
 ./scripts/activity_protection.sh
 
