@@ -16,6 +16,12 @@ apt -y -qq install curl iptables-persistent ipset conntrack
 yum -y install curl iptables-service ipset-service conntrack
 
 
+chmod +x activity_protection.sh
+chmod +x experimental_protection.sh
+chmod +x geo_protection.sh
+chmod +x traffic_protection.sh
+
+
 echo "Blocking dangerous \ invalid packets."
 ./scripts/activity_protection.sh
 
