@@ -24,10 +24,12 @@
 ######################################################################################################
 
 # Max amount of connections that can be established from and ip at the same time.
-max_established_connections=10
+# default: 12
+max_established_connections=12
 
 # Max amount of new connections allowed in 1 minute.
-max_connections_per_second=80
+# default: 60
+max_connections_per_minute=60
 
 # Rcon port you are using. Don't change this if you don't use rcon.
 rcon_port=999999
@@ -44,7 +46,7 @@ geo_minecraft_port=25565
 geo_whitelist_countries="us,uk,fr,de"
 
 
-# Please check scripts/advanced_protection.sh before enabling
+# Please check scripts/experimental_protection.sh before enabling
 # Disabled by default because it might cause some problems with incoming minecraft connections.
 enable_experimental_protection=false
 
@@ -62,7 +64,7 @@ echo "Blocking dangerous \ invalid packets."
 
 # Traffic protection
 echo "Enabling traffic limitations \ protection."
-./scripts/traffic_protection.sh $max_established_connections $max_connections_per_second $rcon_port
+./scripts/traffic_protection.sh $max_established_connections $max_connections_per_minute $rcon_port
 
 # Geo protection
 if [ "$geo_whitelist_enabled" = true ] ; then
