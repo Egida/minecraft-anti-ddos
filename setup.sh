@@ -60,3 +60,6 @@ fi
 if [ "$enable_advanced_protection" = true ] ; then
     ./scripts/advanced_protection.sh # Blocks somhow-invalid \ dangerous traffic.
 fi
+
+iptables-save > /etc/sysconfig/iptables
+iptables-save > /etc/iptables/rules.v4
