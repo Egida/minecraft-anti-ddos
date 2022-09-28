@@ -11,11 +11,6 @@ iptables -A INPUT -p tcp -m connlimit --connlimit-above $1 -j REJECT --reject-wi
 iptables -A INPUT -p tcp -m conntrack --ctstate NEW -m limit --limit 60/s --limit-burst $2 -j ACCEPT 
 iptables -A INPUT -p tcp -m conntrack --ctstate NEW -j DROP
 
-# use synproxy on all ports
-iptables -t raw -A PREROUTING -p tcp -m tcp --syn -j CT --notrack
-iptables -A INPUT -p tcp -m tcp -m conntrack --ctstate INVALID,UNTRACKED -j SYNPROXY --sack-perm --timestamp --wscale 7 --mss 1460
-iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
-
 # protect ssh from brute-force
 iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -m recent --set
 iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -m recent --update --seconds 120 --hitcount 30 -j DROP
