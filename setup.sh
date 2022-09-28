@@ -20,6 +20,7 @@
 # If you have already ran this script and you want to make some changes to protection, run ./tear-down
 # script first.
 
+
 ######################################################################################################
 
 # Max amount of connections that can be established from and ip at the same time.
@@ -49,17 +50,23 @@ enable_advanced_protection=false
 
 ######################################################################################################
 
-./scripts/activity_protection.sh # Block dangerous activity
 
-./scripts/traffic_protection.sh $max_established_connections $max_connections_per_second $rcon_port # Traffic protection
+# Block dangerous activity
+./scripts/activity_protection.sh
 
+# Traffic protection
+./scripts/traffic_protection.sh $max_established_connections $max_connections_per_second $rcon_port
+
+# Geo protection
 if [ "$geo_whitelist_enabled" = true ] ; then
-    ./scripts/geo_protection.sh $geo_minecraft_port $geo_whitelist_countries # Geo protection
+    ./scripts/geo_protection.sh $geo_minecraft_port $geo_whitelist_countries 
 fi
 
+# Blocks somhow-invalid \ dangerous traffic.
 if [ "$enable_advanced_protection" = true ] ; then
-    ./scripts/advanced_protection.sh # Blocks somhow-invalid \ dangerous traffic.
+    ./scripts/advanced_protection.sh
 fi
+
 
 iptables-save > /etc/sysconfig/iptables
 iptables-save > /etc/iptables/rules.v4
