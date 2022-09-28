@@ -10,6 +10,16 @@ This script is free and open for any use and distribution. It is recommended to 
 
 It is quite important to note that if your hosting provider does not have any common anti-DDOS, then this script will be practically useless.
 
+## Statistics
+
+Test server: Intel Xeon E5-2680V2 1 core, Ubuntu Server 20.04, OpenJDK 8
+
+| Mode  | Max CPU usage | Average CPU usage |
+| ------------- | ------------- | ------------- |
+| Without protection | 100% | 50% |
+| Traffic protection  | 60% | 40% |
+| Traffic protection + Geo protection  | 50% | 35% |
+
 ## Usage
 
 1) Clone project
