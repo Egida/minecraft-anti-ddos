@@ -1,16 +1,6 @@
 #!/bin/bash
 
-# created by oqo0 | 2022 
-# 
-# This script is free and open for any use and distribution. It is recommended to adjust the following
-# parameters for yourself in order to achieve the best protection quality. This script has been tested
-# on servers with hundreds of regular players. If you encounter any problems please create an issue on
-# project's Github: https://github.com/oqo0/minecraft-anti-ddos
-# 
-# It is also quite important to note that if your hosting provider does not have any common anti-DDOS,
-# then this script will be practically useless.
-#
-
+# created by oqo0 | 2022
 
 # Allow traffic to your Minecraft port only from whitelisted countries.
 # Check scripts/geo_protection.sh first.
