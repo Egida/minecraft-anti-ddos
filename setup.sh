@@ -46,7 +46,7 @@ geo_whitelist_countries="us,uk,fr,de"
 
 # Please check scripts/advanced_protection.sh before enabling
 # Disabled by default because it might cause some problems with incoming minecraft connections.
-enable_advanced_protection=false
+enable_experimental_protection=false
 
 ######################################################################################################
 
@@ -71,9 +71,9 @@ if [ "$geo_whitelist_enabled" = true ] ; then
 fi
 
 # Blocks somhow-invalid \ dangerous traffic.
-if [ "$enable_advanced_protection" = true ] ; then
-    echo "Enabling advanced protection."
-    ./scripts/advanced_protection.sh
+if [ "$enable_experimental_protection" = true ] ; then
+    echo "Enabling experimental protection."
+    ./scripts/experimental_protection.sh
 fi
 
 echo "Saving rules."
