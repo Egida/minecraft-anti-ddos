@@ -12,18 +12,22 @@ It is quite important to note that if your hosting provider does not have any co
 
 ## Usage
 
+1) Clone project
 ```
 git clone https://github.com/oqo0/minecraft-anti-ddos.git
 ```
 
+2) Adjust script for your needs
 ```
 nano setup.sh
 ```
 
+3) Make script executable
 ```
 chmod +x setup.sh
 ```
 
+4) Run the script
 ```
 ./setup.sh
 ```
